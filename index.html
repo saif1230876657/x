@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>موقعي الموحد</title>
     
     <!-- Tailwind CSS -->
@@ -15,6 +15,9 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+
+    <!-- Hammer.js for swipe gestures -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
     
     <style>
         body {
@@ -22,93 +25,110 @@
             -webkit-tap-highlight-color: transparent;
         }
         .nav-btn.active {
-            color: #3b82f6;
+            color: #3b82f6; /* Blue color for active icon */
             transform: scale(1.1);
         }
         .center-btn-shadow {
              box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 0 3px 5px -2px rgba(0, 0, 0, 0.05);
         }
-
-        /* --- بداية التعديل: إضافة الأكواد لتصغير نافذة عرض المواقع --- */
+        /* --- بداية التعديل: إزالة الإطار المرئي --- */
         #viewer {
-            /* تصغير حجم الإطار إلى 95% لجعله أصغر بصريًا */
-            transform: scale(0.95);
-            
-            /* تحديد نقطة الأصل للتصغير من الأعلى وفي المنتصف */
-            /* هذا يجعل الإطار "ينكمش" للأعلى، مما يخلق مساحة فارغة في الأسفل كما طلبت */
-            transform-origin: top center;
-            
-            /* إضافة حواف دائرية لمظهر عصري */
-            border-radius: 12px;
-            
-            /* إضافة ظل خفيف لجعل الإطار بارزًا */
-            box-shadow: 0 6px B20px rgba(0,0,0,0.1);
-            
-            /* إضافة حركة انتقال ناعمة عند حدوث أي تغييرات في الحجم */
-            transition: transform 0.3s ease;
+            /* تمت إزالة الخصائص التي تنشئ الإطار لجعله شفافًا ويملأ المساحة */
+            transition: opacity 0.3s ease; /* transition for smooth loading */
         }
         /* --- نهاية التعديل --- */
-
     </style>
 </head>
-<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+<!-- بداية التعديل: تغيير لون الخلفية إلى الأسود -->
+<body class="bg-black flex flex-col h-screen overflow-hidden">
+<!-- نهاية التعديل -->
 
-    <!-- Top Navigation Bar (More Compact) -->
+    <!-- Top Navigation Bar -->
     <div id="top-nav" class="relative bg-white shadow-lg z-10">
-        <!-- Reduced height to h-12 -->
         <div class="flex justify-around items-center h-12 px-2">
-            <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
-                <!-- Reduced icon size to text-lg -->
+            <button id="ai-btn" onclick="navigateTo(0)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
                 <i class="fa-solid fa-robot text-lg"></i>
             </button>
-            <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+            <button id="edit-btn" onclick="navigateTo(1)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
                 <i class="fa-solid fa-pen-to-square text-lg"></i>
             </button>
-            <div class="w-1/5"></div> <!-- Placeholder for central button -->
-            <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+            <div class="w-1/5"></div> <!-- Placeholder -->
+            <button id="video-btn" onclick="navigateTo(3)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
                 <i class="fa-solid fa-video text-lg"></i>
             </button>
-            <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+            <button id="chat-btn" onclick="navigateTo(4)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
                 <i class="fa-solid fa-comments text-lg"></i>
             </button>
         </div>
-        <!-- Adjusted positioning and size -->
         <div id="center-btn-container" class="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-3 transform transition-transform duration-300 ease-in-out">
-             <!-- Reduced size of the center button to w-12 h-12 -->
-             <button onclick="loadSite('https://saif1230876657.github.io/saifSAR1/', this)" class="center-btn w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
+             <button id="bolt-btn" onclick="navigateTo(2)" class="center-btn w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
                 <i class="fa-solid fa-bolt text-lg"></i>
             </button>
         </div>
     </div>
     
-    <!-- Iframe takes up the remaining space -->
-    <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="flex-grow w-full border-none"></iframe>
+    <!-- --- بداية التعديل: حاوية Iframe لرفع المحتوى --- -->
+    <!-- هذا الـ div ينمو ليملأ المساحة ويدفع الـ iframe للأعلى باستخدام padding -->
+    <div class="flex-grow w-full pb-5">
+        <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="w-full h-full border-none"></iframe>
+    </div>
+    <!-- --- نهاية التعديل --- -->
 
     <script>
         const viewer = document.getElementById('viewer');
-        const navButtons = document.querySelectorAll('.nav-btn');
         const centerBtnContainer = document.getElementById('center-btn-container');
 
-        // On page load, AI button is active, so the center button should start in the 'up' position (flush with the bar).
-        document.addEventListener('DOMContentLoaded', () => {
-            centerBtnContainer.classList.remove('translate-y-3');
-        });
+        let currentIndex = 0;
 
-        function loadSite(url, clickedButton) {
-            viewer.src = url;
+        const sites = [
+            { url: 'https://tinyurl.com/saif-ai', button: document.getElementById('ai-btn') },
+            { url: 'https://saif1230876657.github.io/saifsa2/', button: document.getElementById('edit-btn') },
+            { url: 'https://saif1230876657.github.io/saifSAR1/', button: document.getElementById('bolt-btn') },
+            { url: 'https://saif1230876657.github.io/saifj/', button: document.getElementById('video-btn') },
+            { url: 'https://saif1230876657.github.io/saifsa65/', button: document.getElementById('chat-btn') }
+        ];
+
+        // مصفوفة لجميع الأزرار القابلة للنقر (بما في ذلك الزر الأوسط)
+        const allButtons = sites.map(site => site.button);
+
+        function navigateTo(index) {
+            if (index < 0) index = sites.length - 1;
+            if (index >= sites.length) index = 0;
+
+            currentIndex = index;
+            const site = sites[currentIndex];
             
-            navButtons.forEach(btn => btn.classList.remove('active'));
-            if (clickedButton && clickedButton.classList.contains('nav-btn')) {
-                clickedButton.classList.add('active');
+            viewer.src = site.url;
+            
+            // تحديث حالة الأزرار
+            allButtons.forEach(btn => btn.classList.remove('active'));
+            if (site.button.classList.contains('nav-btn')) {
+                site.button.classList.add('active');
             }
             
-            // If the AI button is clicked, pull the center button up. Otherwise, let it hang down slightly.
-            if (clickedButton.id === 'ai-btn') {
-                centerBtnContainer.classList.remove('translate-y-3');
+            // تحديث موضع الزر الأوسط بناءً على الموقع الحالي
+            if (site.button.id === 'ai-btn') {
+                 centerBtnContainer.classList.remove('translate-y-3');
             } else {
-                centerBtnContainer.classList.add('translate-y-3');
+                 centerBtnContainer.classList.add('translate-y-3');
             }
         }
+        
+        // إعداد Hammer.js للتعرف على السحب على جسم الصفحة بالكامل
+        const hammer = new Hammer(document.body);
+
+        hammer.on('swipeleft', () => {
+            navigateTo(currentIndex + 1);
+        });
+
+        hammer.on('swiperight', () => {
+            navigateTo(currentIndex - 1);
+        });
+
+        // تفعيل الزر الأول عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo(0);
+        });
     </script>
 
 </body>
