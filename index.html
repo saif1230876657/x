@@ -32,13 +32,13 @@
              box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 0 3px 5px -2px rgba(0, 0, 0, 0.05);
         }
 
-        /* --- بداية التعديل: تصغير نافذة العرض بشكل ملحوظ --- */
+        /* --- بداية التعديل: تصغير النافذة ورفعها للأعلى --- */
         #viewer {
             width: 100%;
             height: 100%;
-            /* تصغير النافذة إلى 85% من حجم الحاوية لإنشاء إطار أسود واضح */
-            transform: scale(0.85);
-            transform-origin: center; /* للتأكد من أن التصغير يتم من المنتصف */
+            /* تصغير النافذة إلى 85% ورفعها للأعلى بمقدار 5% */
+            transform: scale(0.85) translateY(-5%);
+            transform-origin: center; /* للتأكد من أن التحويل يتم من المنتصف */
             
             /* تحسينات بصرية */
             border-radius: 20px; /* زيادة استدارة الحواف */
@@ -74,11 +74,10 @@
         </div>
     </div>
     
-    <!-- --- بداية التعديل: حاوية لتوسيط الـ iframe المصغر --- -->
+    <!-- حاوية لتوسيط الـ iframe المصغر والمرفوع -->
     <div class="flex-grow w-full flex items-center justify-center overflow-hidden">
         <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="border-none"></iframe>
     </div>
-    <!-- --- نهاية التعديل --- -->
 
     <script>
         const viewer = document.getElementById('viewer');
