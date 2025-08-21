@@ -25,9 +25,6 @@
             color: #3b82f6;
             transform: scale(1.1);
         }
-        .nav-btn.active span {
-            font-weight: 600;
-        }
         .center-btn-shadow {
              box-shadow: 0 10px 20px -5px rgba(236, 72, 153, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
         }
@@ -35,27 +32,26 @@
 </head>
 <body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
     
-    <!-- Iframe -->
+    <!-- Iframe takes up all available space -->
     <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="flex-grow w-full border-none"></iframe>
 
-    <!-- Bottom Navigation Bar -->
-    <div class="relative bg-white shadow-t-lg z-10">
+    <!-- Bottom Navigation Bar (Always Visible) -->
+    <div id="bottom-nav" class="relative bg-white shadow-t-lg z-10">
         <div class="flex justify-around items-center h-16 px-2">
-            <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
-                <i class="fa-solid fa-robot text-xl"></i><span class="text-xs mt-1">AI</span>
+            <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-robot text-2xl"></i>
             </button>
-            <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
-                <i class="fa-solid fa-pen-to-square text-xl"></i><span class="text-xs mt-1">اختبارات</span>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-pen-to-square text-2xl"></i>
             </button>
             <div class="w-1/5"></div> <!-- Placeholder for central button -->
-            <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
-                <i class="fa-solid fa-video text-xl"></i><span class="text-xs mt-1">فيديوهات</span>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-video text-2xl"></i>
             </button>
-            <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
-                <i class="fa-solid fa-comments text-xl"></i><span class="text-xs mt-1">دردشة</span>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-comments text-2xl"></i>
             </button>
         </div>
-        <!-- The "-translate-y-4" class makes the button stick out just a little -->
         <div id="center-btn-container" class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-4 transform transition-transform duration-300 ease-in-out">
              <button onclick="loadSite('https://saif1230876657.github.io/saifSAR1/', this)" class="center-btn w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
                 <i class="fa-solid fa-bolt text-2xl"></i>
@@ -68,22 +64,24 @@
         const navButtons = document.querySelectorAll('.nav-btn');
         const centerBtnContainer = document.getElementById('center-btn-container');
 
-        // On page load, the AI button is active, so lower the center button to be flush with the bar.
+        // On page load, check which button is active to set the initial state of the center button
         document.addEventListener('DOMContentLoaded', () => {
-             centerBtnContainer.classList.remove('-translate-y-4');
+            const activeButton = document.querySelector('.nav-btn.active');
+            // The AI button is active by default, so the center button should start in the lower position.
+            if (activeButton && activeButton.id === 'ai-btn') {
+                centerBtnContainer.classList.remove('-translate-y-4');
+            }
         });
 
         function loadSite(url, clickedButton) {
             viewer.src = url;
             
-            // Handle active state for nav buttons
             navButtons.forEach(btn => btn.classList.remove('active'));
             if (clickedButton && clickedButton.classList.contains('nav-btn')) {
                 clickedButton.classList.add('active');
             }
             
-            // If the AI button is clicked, lower the center button by removing the translation class.
-            // For all other buttons, add the class to make it stick out slightly.
+            // If the AI button is clicked, lower the center button. Otherwise, raise it slightly.
             if (clickedButton.id === 'ai-btn') {
                 centerBtnContainer.classList.remove('-translate-y-4');
             } else {
