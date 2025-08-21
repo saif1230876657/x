@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>موقعي الموحد</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .nav-btn.active {
+            color: #3b82f6;
+            transform: scale(1.1);
+        }
+        .nav-btn.active span {
+            font-weight: 600;
+        }
+        .center-btn-shadow {
+             box-shadow: 0 10px 20px -5px rgba(236, 72, 153, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
+    
+    <!-- Iframe -->
+    <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="flex-grow w-full border-none"></iframe>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="relative bg-white shadow-t-lg z-10">
+        <div class="flex justify-around items-center h-16 px-2">
+            <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
+                <i class="fa-solid fa-robot text-xl"></i><span class="text-xs mt-1">AI</span>
+            </button>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
+                <i class="fa-solid fa-pen-to-square text-xl"></i><span class="text-xs mt-1">اختبارات</span>
+            </button>
+            <div class="w-1/5"></div> <!-- Placeholder for central button -->
+            <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
+                <i class="fa-solid fa-video text-xl"></i><span class="text-xs mt-1">فيديوهات</span>
+            </button>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500 transition-all duration-300 ease-in-out">
+                <i class="fa-solid fa-comments text-xl"></i><span class="text-xs mt-1">دردشة</span>
+            </button>
+        </div>
+        <!-- The "-translate-y-4" class makes the button stick out just a little -->
+        <div id="center-btn-container" class="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-4 transform transition-transform duration-300 ease-in-out">
+             <button onclick="loadSite('https://saif1230876657.github.io/saifSAR1/', this)" class="center-btn w-16 h-16 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-bolt text-2xl"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const viewer = document.getElementById('viewer');
+        const navButtons = document.querySelectorAll('.nav-btn');
+        const centerBtnContainer = document.getElementById('center-btn-container');
+
+        // On page load, the AI button is active, so lower the center button to be flush with the bar.
+        document.addEventListener('DOMContentLoaded', () => {
+             centerBtnContainer.classList.remove('-translate-y-4');
+        });
+
+        function loadSite(url, clickedButton) {
+            viewer.src = url;
+            
+            // Handle active state for nav buttons
+            navButtons.forEach(btn => btn.classList.remove('active'));
+            if (clickedButton && clickedButton.classList.contains('nav-btn')) {
+                clickedButton.classList.add('active');
+            }
+            
+            // If the AI button is clicked, lower the center button by removing the translation class.
+            // For all other buttons, add the class to make it stick out slightly.
+            if (clickedButton.id === 'ai-btn') {
+                centerBtnContainer.classList.remove('-translate-y-4');
+            } else {
+                centerBtnContainer.classList.add('-translate-y-4');
+            }
+        }
+    </script>
+
+</body>
+</html>
