@@ -11,10 +11,11 @@
     <!-- Font Awesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     
-    <!-- Manifest -->
-    <link rel="manifest" href="manifest.json">
-    <meta name="theme-color" content="#3b82f6">
-
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+    
     <style>
         body {
             font-family: 'Cairo', sans-serif;
@@ -25,102 +26,90 @@
             transform: scale(1.1);
         }
         .center-btn-shadow {
-             box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 
-                         0 3px 5px -2px rgba(0, 0, 0, 0.05);
+             box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 0 3px 5px -2px rgba(0, 0, 0, 0.05);
         }
+
+        /* --- بداية التعديل: إضافة الأكواد لتصغير نافذة عرض المواقع --- */
+        #viewer {
+            /* تصغير حجم الإطار إلى 95% لجعله أصغر بصريًا */
+            transform: scale(0.95);
+            
+            /* تحديد نقطة الأصل للتصغير من الأعلى وفي المنتصف */
+            /* هذا يجعل الإطار "ينكمش" للأعلى، مما يخلق مساحة فارغة في الأسفل كما طلبت */
+            transform-origin: top center;
+            
+            /* إضافة حواف دائرية لمظهر عصري */
+            border-radius: 12px;
+            
+            /* إضافة ظل خفيف لجعل الإطار بارزًا */
+            box-shadow: 0 6px B20px rgba(0,0,0,0.1);
+            
+            /* إضافة حركة انتقال ناعمة عند حدوث أي تغييرات في الحجم */
+            transition: transform 0.3s ease;
+        }
+        /* --- نهاية التعديل --- */
+
     </style>
 </head>
 <body class="bg-gray-100 flex flex-col h-screen overflow-hidden">
 
-    <!-- شاشة التثبيت -->
-    <div id="install-screen" class="hidden flex flex-col justify-center items-center text-center h-screen p-6">
-        <img src="icon-192.png" alt="App Icon" class="w-24 h-24 mb-4">
-        <h2 class="text-2xl font-bold mb-2">🚀 ثبّت التطبيق</h2>
-        <p class="mb-4 text-gray-600">رجاءً قم بتثبيت التطبيق لمتابعة الاستخدام.</p>
-        <button id="installBtn" class="px-6 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700 transition">
-            <i class="fa-solid fa-download mr-2"></i> تثبيت التطبيق
-        </button>
-    </div>
-
-    <!-- محتوى التطبيق -->
-    <div id="app-content" class="hidden flex flex-col h-screen overflow-hidden">
-        <!-- Top Navigation Bar -->
-        <div id="top-nav" class="relative bg-white shadow-lg z-10">
-            <div class="flex justify-around items-center h-12 px-2">
-                <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
-                    <i class="fa-solid fa-robot text-lg"></i>
-                </button>
-                <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                    <i class="fa-solid fa-pen-to-square text-lg"></i>
-                </button>
-                <div class="w-1/5"></div>
-                <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                    <i class="fa-solid fa-video text-lg"></i>
-                </button>
-                <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                    <i class="fa-solid fa-comments text-lg"></i>
-                </button>
-            </div>
-            <div id="center-btn-container" class="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-3 transform transition-transform duration-300 ease-in-out">
-                <button onclick="loadSite('https://saif1230876657.github.io/saifSAR1/', this)" class="center-btn w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
-                    <i class="fa-solid fa-bolt text-lg"></i>
-                </button>
-            </div>
+    <!-- Top Navigation Bar (More Compact) -->
+    <div id="top-nav" class="relative bg-white shadow-lg z-10">
+        <!-- Reduced height to h-12 -->
+        <div class="flex justify-around items-center h-12 px-2">
+            <button id="ai-btn" onclick="loadSite('https://tinyurl.com/saif-ai', this)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <!-- Reduced icon size to text-lg -->
+                <i class="fa-solid fa-robot text-lg"></i>
+            </button>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa2/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-pen-to-square text-lg"></i>
+            </button>
+            <div class="w-1/5"></div> <!-- Placeholder for central button -->
+            <button onclick="loadSite('https://saif1230876657.github.io/saifj/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-video text-lg"></i>
+            </button>
+            <button onclick="loadSite('https://saif1230876657.github.io/saifsa65/', this)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
+                <i class="fa-solid fa-comments text-lg"></i>
+            </button>
         </div>
-
-        <!-- Iframe -->
-        <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="flex-grow w-full border-none"></iframe>
+        <!-- Adjusted positioning and size -->
+        <div id="center-btn-container" class="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-3 transform transition-transform duration-300 ease-in-out">
+             <!-- Reduced size of the center button to w-12 h-12 -->
+             <button onclick="loadSite('https://saif1230876657.github.io/saifSAR1/', this)" class="center-btn w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
+                <i class="fa-solid fa-bolt text-lg"></i>
+            </button>
+        </div>
     </div>
+    
+    <!-- Iframe takes up the remaining space -->
+    <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="flex-grow w-full border-none"></iframe>
 
     <script>
         const viewer = document.getElementById('viewer');
         const navButtons = document.querySelectorAll('.nav-btn');
         const centerBtnContainer = document.getElementById('center-btn-container');
-        const installScreen = document.getElementById('install-screen');
-        const appContent = document.getElementById('app-content');
-        const installBtn = document.getElementById('installBtn');
-        let deferredPrompt;
+
+        // On page load, AI button is active, so the center button should start in the 'up' position (flush with the bar).
+        document.addEventListener('DOMContentLoaded', () => {
+            centerBtnContainer.classList.remove('translate-y-3');
+        });
 
         function loadSite(url, clickedButton) {
             viewer.src = url;
+            
             navButtons.forEach(btn => btn.classList.remove('active'));
             if (clickedButton && clickedButton.classList.contains('nav-btn')) {
                 clickedButton.classList.add('active');
             }
+            
+            // If the AI button is clicked, pull the center button up. Otherwise, let it hang down slightly.
             if (clickedButton.id === 'ai-btn') {
                 centerBtnContainer.classList.remove('translate-y-3');
             } else {
                 centerBtnContainer.classList.add('translate-y-3');
             }
         }
-
-        // Check if running in standalone
-        const isInStandalone = window.matchMedia('(display-mode: standalone)').matches 
-                            || window.navigator.standalone === true;
-
-        if (isInStandalone) {
-            appContent.classList.remove("hidden");
-        } else {
-            installScreen.classList.remove("hidden");
-        }
-
-        // Handle install button
-        window.addEventListener('beforeinstallprompt', (e) => {
-            e.preventDefault();
-            deferredPrompt = e;
-            installBtn.addEventListener('click', () => {
-                deferredPrompt.prompt();
-                deferredPrompt.userChoice.then(() => {
-                    deferredPrompt = null;
-                });
-            });
-        });
-
-        // Register service worker
-        if ("serviceWorker" in navigator) {
-            navigator.serviceWorker.register("sw.js")
-              .then(() => console.log("Service Worker Registered"));
-        }
     </script>
+
 </body>
 </html>
