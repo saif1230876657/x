@@ -31,17 +31,24 @@
         .center-btn-shadow {
              box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 0 3px 5px -2px rgba(0, 0, 0, 0.05);
         }
-        /* --- بداية التعديل: إزالة الإطار المرئي --- */
+
+        /* --- بداية التعديل: تصغير نافذة العرض بشكل ملحوظ --- */
         #viewer {
-            /* تمت إزالة الخصائص التي تنشئ الإطار لجعله شفافًا ويملأ المساحة */
-            transition: opacity 0.3s ease; /* transition for smooth loading */
+            width: 100%;
+            height: 100%;
+            /* تصغير النافذة إلى 85% من حجم الحاوية لإنشاء إطار أسود واضح */
+            transform: scale(0.85);
+            transform-origin: center; /* للتأكد من أن التصغير يتم من المنتصف */
+            
+            /* تحسينات بصرية */
+            border-radius: 20px; /* زيادة استدارة الحواف */
+            box-shadow: 0 0 30px rgba(0,0,0,0.6); /* ظل خفيف للعمق */
+            transition: transform 0.3s ease; /* حركة ناعمة */
         }
         /* --- نهاية التعديل --- */
     </style>
 </head>
-<!-- بداية التعديل: تغيير لون الخلفية إلى الأسود -->
 <body class="bg-black flex flex-col h-screen overflow-hidden">
-<!-- نهاية التعديل -->
 
     <!-- Top Navigation Bar -->
     <div id="top-nav" class="relative bg-white shadow-lg z-10">
@@ -67,10 +74,9 @@
         </div>
     </div>
     
-    <!-- --- بداية التعديل: حاوية Iframe لرفع المحتوى --- -->
-    <!-- هذا الـ div ينمو ليملأ المساحة ويدفع الـ iframe للأعلى باستخدام padding -->
-    <div class="flex-grow w-full pb-5">
-        <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="w-full h-full border-none"></iframe>
+    <!-- --- بداية التعديل: حاوية لتوسيط الـ iframe المصغر --- -->
+    <div class="flex-grow w-full flex items-center justify-center overflow-hidden">
+        <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="border-none"></iframe>
     </div>
     <!-- --- نهاية التعديل --- -->
 
@@ -88,7 +94,6 @@
             { url: 'https://saif1230876657.github.io/saifsa65/', button: document.getElementById('chat-btn') }
         ];
 
-        // مصفوفة لجميع الأزرار القابلة للنقر (بما في ذلك الزر الأوسط)
         const allButtons = sites.map(site => site.button);
 
         function navigateTo(index) {
@@ -100,13 +105,11 @@
             
             viewer.src = site.url;
             
-            // تحديث حالة الأزرار
             allButtons.forEach(btn => btn.classList.remove('active'));
             if (site.button.classList.contains('nav-btn')) {
                 site.button.classList.add('active');
             }
             
-            // تحديث موضع الزر الأوسط بناءً على الموقع الحالي
             if (site.button.id === 'ai-btn') {
                  centerBtnContainer.classList.remove('translate-y-3');
             } else {
@@ -114,7 +117,6 @@
             }
         }
         
-        // إعداد Hammer.js للتعرف على السحب على جسم الصفحة بالكامل
         const hammer = new Hammer(document.body);
 
         hammer.on('swipeleft', () => {
@@ -125,7 +127,6 @@
             navigateTo(currentIndex - 1);
         });
 
-        // تفعيل الزر الأول عند تحميل الصفحة
         document.addEventListener('DOMContentLoaded', () => {
             navigateTo(0);
         });
