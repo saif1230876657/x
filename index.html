@@ -1,135 +1,143 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>موقعي الموحد</title>
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>موقعي الموحد</title>
+  
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Hammer.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      background: black; /* أي زيادات تبقى سوداء */
+    }
 
-    <!-- Hammer.js for swipe gestures -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js"></script>
-    
-    <style>
-        body {
-            font-family: 'Cairo', sans-serif;
-            -webkit-tap-highlight-color: transparent;
-        }
-        .nav-btn.active {
-            color: #3b82f6; /* Blue color for active icon */
-            transform: scale(1.1);
-        }
-        .center-btn-shadow {
-             box-shadow: 0 8px 15px -3px rgba(236, 72, 153, 0.4), 0 3px 5px -2px rgba(0, 0, 0, 0.05);
-        }
+    .nav-btn {
+      transition: all 0.3s ease;
+    }
+    .nav-btn.active {
+      background: linear-gradient(to bottom right, #3b82f6, #9333ea);
+      color: white !important;
+      transform: scale(1.2);
+      border-radius: 15px;
+      padding: 8px;
+    }
+    .nav-btn:hover {
+      transform: scale(1.1);
+    }
 
-        /* --- بداية التعديل: تصغير النافذة ورفعها للأعلى --- */
-        #viewer {
-            width: 100%;
-            height: 100%;
-            /* تصغير النافذة إلى 85% ورفعها للأعلى بمقدار 5% */
-            transform: scale(0.85) translateY(-5%);
-            transform-origin: center; /* للتأكد من أن التحويل يتم من المنتصف */
-            
-            /* تحسينات بصرية */
-            border-radius: 20px; /* زيادة استدارة الحواف */
-            box-shadow: 0 0 30px rgba(0,0,0,0.6); /* ظل خفيف للعمق */
-            transition: transform 0.3s ease; /* حركة ناعمة */
-        }
-        /* --- نهاية التعديل --- */
-    </style>
+    /* 📌 الحاوية بتحافظ على النسبة */
+    .viewer-container {
+      position: relative;
+      flex-grow: 1;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: black;
+      overflow: hidden;
+    }
+
+    #viewer {
+      width: 100%;
+      height: 100%;
+      max-width: 100%;
+      max-height: 100%;
+      aspect-ratio: 16 / 9; /* النسبة الطبيعية للابتوب */
+      border: none;
+      border-radius: 12px;
+      box-shadow: 0 0 25px rgba(0,0,0,0.8);
+      background: white;
+      transition: opacity 0.3s ease-in-out;
+    }
+  </style>
 </head>
-<body class="bg-black flex flex-col h-screen overflow-hidden">
+<body class="flex flex-col h-screen overflow-hidden">
 
-    <!-- Top Navigation Bar -->
-    <div id="top-nav" class="relative bg-white shadow-lg z-10">
-        <div class="flex justify-around items-center h-12 px-2">
-            <button id="ai-btn" onclick="navigateTo(0)" class="nav-btn active flex flex-col items-center justify-center w-1/5 text-gray-500">
-                <i class="fa-solid fa-robot text-lg"></i>
-            </button>
-            <button id="edit-btn" onclick="navigateTo(1)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                <i class="fa-solid fa-pen-to-square text-lg"></i>
-            </button>
-            <div class="w-1/5"></div> <!-- Placeholder -->
-            <button id="video-btn" onclick="navigateTo(3)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                <i class="fa-solid fa-video text-lg"></i>
-            </button>
-            <button id="chat-btn" onclick="navigateTo(4)" class="nav-btn flex flex-col items-center justify-center w-1/5 text-gray-500">
-                <i class="fa-solid fa-comments text-lg"></i>
-            </button>
-        </div>
-        <div id="center-btn-container" class="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-3 transform transition-transform duration-300 ease-in-out">
-             <button id="bolt-btn" onclick="navigateTo(2)" class="center-btn w-12 h-12 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center center-btn-shadow transform transition-transform duration-300 hover:scale-110 active:scale-95">
-                <i class="fa-solid fa-bolt text-lg"></i>
-            </button>
-        </div>
+  <!-- Navigation -->
+  <div id="top-nav" class="relative bg-white shadow-lg z-10">
+    <div class="flex justify-around items-center h-14 px-2">
+      <button id="ai-btn" onclick="navigateTo(0)" class="nav-btn active flex items-center justify-center w-1/5 text-gray-500 text-xl">
+        <i class="fa-solid fa-robot"></i>
+      </button>
+      <button id="edit-btn" onclick="navigateTo(1)" class="nav-btn flex items-center justify-center w-1/5 text-gray-500 text-xl">
+        <i class="fa-solid fa-pen-to-square"></i>
+      </button>
+      <div class="w-1/5"></div>
+      <button id="video-btn" onclick="navigateTo(3)" class="nav-btn flex items-center justify-center w-1/5 text-gray-500 text-xl">
+        <i class="fa-solid fa-video"></i>
+      </button>
+      <button id="chat-btn" onclick="navigateTo(4)" class="nav-btn flex items-center justify-center w-1/5 text-gray-500 text-xl">
+        <i class="fa-solid fa-comments"></i>
+      </button>
     </div>
-    
-    <!-- حاوية لتوسيط الـ iframe المصغر والمرفوع -->
-    <div class="flex-grow w-full flex items-center justify-center overflow-hidden">
-        <iframe id="viewer" src="https://tinyurl.com/saif-ai" class="border-none"></iframe>
+    <div id="center-btn-container" class="absolute left-1/2 bottom-0 -translate-x-1/2 translate-y-3 transform transition-transform">
+      <button id="bolt-btn" onclick="navigateTo(2)" class="center-btn w-14 h-14 rounded-full bg-gradient-to-br from-pink-500 to-orange-400 text-white flex items-center justify-center shadow-lg transform transition-transform hover:scale-110 active:scale-95">
+        <i class="fa-solid fa-bolt text-xl"></i>
+      </button>
     </div>
+  </div>
 
-    <script>
-        const viewer = document.getElementById('viewer');
-        const centerBtnContainer = document.getElementById('center-btn-container');
+  <!-- Viewer -->
+  <div class="viewer-container">
+    <iframe id="viewer" src="https://tinyurl.com/saif-ai"></iframe>
+  </div>
 
-        let currentIndex = 0;
+  <script>
+    const viewer = document.getElementById('viewer');
+    const centerBtnContainer = document.getElementById('center-btn-container');
+    let currentIndex = 0;
 
-        const sites = [
-            { url: 'https://tinyurl.com/saif-ai', button: document.getElementById('ai-btn') },
-            { url: 'https://saif1230876657.github.io/saifsa2/', button: document.getElementById('edit-btn') },
-            { url: 'https://saif1230876657.github.io/saifSAR1/', button: document.getElementById('bolt-btn') },
-            { url: 'https://saif1230876657.github.io/saifj/', button: document.getElementById('video-btn') },
-            { url: 'https://saif1230876657.github.io/saifsa65/', button: document.getElementById('chat-btn') }
-        ];
+    const sites = [
+      { url: 'https://tinyurl.com/saif-ai', button: document.getElementById('ai-btn') },
+      { url: 'https://saif1230876657.github.io/saifsa2/', button: document.getElementById('edit-btn') },
+      { url: 'https://saif1230876657.github.io/saifSAR1/', button: document.getElementById('bolt-btn') },
+      { url: 'https://saif1230876657.github.io/saifj/', button: document.getElementById('video-btn') },
+      { url: 'https://saif1230876657.github.io/saifsa65/', button: document.getElementById('chat-btn') }
+    ];
 
-        const allButtons = sites.map(site => site.button);
+    const allButtons = sites.map(site => site.button);
 
-        function navigateTo(index) {
-            if (index < 0) index = sites.length - 1;
-            if (index >= sites.length) index = 0;
+    function navigateTo(index) {
+      if (index < 0) index = sites.length - 1;
+      if (index >= sites.length) index = 0;
+      currentIndex = index;
 
-            currentIndex = index;
-            const site = sites[currentIndex];
-            
-            viewer.src = site.url;
-            
-            allButtons.forEach(btn => btn.classList.remove('active'));
-            if (site.button.classList.contains('nav-btn')) {
-                site.button.classList.add('active');
-            }
-            
-            if (site.button.id === 'ai-btn') {
-                 centerBtnContainer.classList.remove('translate-y-3');
-            } else {
-                 centerBtnContainer.classList.add('translate-y-3');
-            }
-        }
-        
-        const hammer = new Hammer(document.body);
+      const site = sites[currentIndex];
+      viewer.style.opacity = 0;
 
-        hammer.on('swipeleft', () => {
-            navigateTo(currentIndex + 1);
-        });
+      setTimeout(() => {
+        viewer.src = site.url;
+        viewer.style.opacity = 1;
+      }, 300);
 
-        hammer.on('swiperight', () => {
-            navigateTo(currentIndex - 1);
-        });
+      allButtons.forEach(btn => btn.classList.remove('active'));
+      site.button.classList.add('active');
 
-        document.addEventListener('DOMContentLoaded', () => {
-            navigateTo(0);
-        });
-    </script>
+      if (site.button.id === 'ai-btn') {
+        centerBtnContainer.classList.remove('translate-y-3');
+      } else {
+        centerBtnContainer.classList.add('translate-y-3');
+      }
+    }
 
+    const hammer = new Hammer(document.body);
+    hammer.on('swipeleft', () => navigateTo(currentIndex + 1));
+    hammer.on('swiperight', () => navigateTo(currentIndex - 1));
+
+    document.addEventListener('DOMContentLoaded', () => navigateTo(0));
+  </script>
 </body>
 </html>
